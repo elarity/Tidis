@@ -1,5 +1,6 @@
 #ifndef __EV_H
 #define __EV_H
+
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -11,10 +12,13 @@
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <sys/time.h>
+
 #define MAX_FD_SIZE  1024
 #define EV_NONE      0  // initial state of a fd
 #define EV_READABLE  1  // when fd ready to read
 #define EV_WRITEABLE 2  // when fd ready to write
+
+// struct & data from ev_factory.c
 struct ev_loop_struct;
 typedef void file_event_processor( struct ev_loop_struct *, int );
 // a file event struct
@@ -42,16 +46,10 @@ typedef struct ev_loop_struct {
   void * tv_out;
 } ev_loop_struct;
 
-// init the ev_loop_struct
+// func from ev_factory.c
 ev_loop_struct * init_ev( int );
 void ev_main( ev_loop_struct * );
 int  ev_process( ev_loop_struct * );
 void ev_create_file_event( ev_loop_struct *, int, file_event_processor *, int ); 
 
-// extern func from select.c、poll.c、epoll.c
-void   create_fd_entry( ev_loop_struct * );
-void   ev_add_event( ev_loop_struct *, int, int );
-void   ev_del_event( ev_loop_struct *, int, int );
-int    poll_event( ev_loop_struct * );
-char * get_event_name();
 #endif

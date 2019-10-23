@@ -1,4 +1,5 @@
 #include "ev_factory.h"
+#include "select.c"
 
 // init the ev_loop_struct
 ev_loop_struct * init_ev( int size ) {
@@ -41,8 +42,11 @@ void ev_create_file_event( ev_loop_struct * ev_loop, int fd, file_event_processo
   ev_file_event_struct * file_event = &( ev_loop->file_events[ fd ] ); 
   file_event->read_processor  = processor; 
   file_event->write_processor = processor; 
-  ev_add_event( ev_loop, fd, event_type );
+  file_event->event_type      = event_type;
   ev_loop->max_fd = fd;
+  //printf( "ev_factory.c | ev_create_file_event | ev_loop->max_fd:%d\n", ev_loop->max_fd );
+  // add fd to select\epoll\poll
+  ev_add_event( ev_loop, fd, event_type );
 }
 
 /* 
@@ -55,48 +59,18 @@ int ev_process( ev_loop_struct * ev_loop ) {
   for( ; ; ) {
     // block at SELECT/EPOLL/POLL system call
     activity_fd_num = poll_event( ev_loop ); 
-    printf( "activity-fd-number : %d\n", activity_fd_num );
-    
-    typedef struct ev_fd_entry_struct {
-      fd_set read_fds;
-      fd_set _read_fds;
-      fd_set write_fds;
-      fd_set _write_fds;
-    } ev_fd_entry_struct;
     if ( activity_fd_num > 0 ) {
-      for ( int i = 0; i <= ev_loop->max_fd; i++ ) {
-        ev_fd_entry_struct * fd_entry = ev_loop->fd_entry; 
+      for ( int i = 0; i < activity_fd_num; i++ ) {
         // take out the event for the fd from ev_loop->events
-        ev_file_event_struct * file_event = &( ev_loop->file_events[ i ] ); 
-        /*
-        if ( FD_ISSET( i, &( fd_entry->_read_fds ) ) ) { 
-          if ( 4 == i ) {
-					  int client_socket_fd; 
-					  struct sockaddr_in client_socket_struct;
-					  socklen_t client_socket_struct_length;
-					  client_socket_struct_length = sizeof( client_socket_struct );
-					  client_socket_fd = accept( i, ( struct sockaddr * )&client_socket_struct, &client_socket_struct_length ); 
-            FD_SET( client_socket_fd, &( fd_entry->read_fds ) );
-            printf( "heheheheheheh\n" );
-            ev_loop->max_fd = client_socket_fd;
-          } 
-          else {
-            printf( "hhahahahhahaha\n" );
-            size_t  recv_buf_length = 30;
-            char    recv_buf[ recv_buf_length ];
-            ssize_t recv_length; 
-            recv_length = recv( i, recv_buf, recv_buf_length, 0 );
-            printf( "%s\n", recv_buf );
-            if ( -1 == recv_length ) {
-              printf( "%s\n", strerror( errno ) );
-              return -1;
-            }
-            send( i, "helloclient", 12, 0 ); 
-            FD_CLR( i, &fd_entry->read_fds );
-            close( i );
-          }
-        } else { printf( "not in read_fds\n" ); }
-        */
+        ev_fire_event_struct * fire_event = &( ev_loop->fire_events[ i ] ); 
+        //printf( "ev_factory.c | fire_event->fd:%d\n", fire_event->fd );
+        ev_file_event_struct * file_event = &( ev_loop->file_events[ fire_event->fd ] ); 
+        if ( EV_READABLE == fire_event->event_type ) {
+          file_event->read_processor( ev_loop, fire_event->fd );
+        } 
+        else if ( EV_WRITEABLE == fire_event->event_type ) {
+           
+        }
       }
     }
   }
