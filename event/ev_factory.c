@@ -1,25 +1,29 @@
 #include "ev_factory.h"
-#include "select.c"
+#ifdef IS_EPOLL
+  #include "epoll.c"
+#else
+  #include "select.c"
+#endif
 
-// init the ev_loop_struct
+/* 
+ * @desc  : init the ev_loop_struct
+ * @param : size, the size of normal event & fire event
+ */
 ev_loop_struct * init_ev( int size ) {
   ev_loop_struct * ev = ( ev_loop_struct * )malloc( sizeof( ev_loop_struct ) );
   ev->event_size = size;
   if ( NULL == ev ) {
-    printf( "can not locate enough 4 event-loop" );
     return NULL;
   }
   ev->file_events = ( ev_file_event_struct * )malloc( sizeof( ev_file_event_struct ) * size );
   if ( NULL == ev ) {
-    printf( "can not locate enough 4 file event" );
     return NULL;
   }
   ev->fire_events = ( ev_fire_event_struct * )malloc( sizeof( ev_fire_event_struct ) * size );
   if ( NULL == ev ) {
-    printf( "can not locate enough 4 fire event" );
     return NULL;
   }
-  create_fd_entry( ev ); 
+  ev_create_fd_entry( ev ); 
   // init every fd-event's mask
   for ( int i = 0; i < size; i++ ) {
     (ev->file_events[ i ]).event_type = EV_NONE;
@@ -58,7 +62,7 @@ int ev_process( ev_loop_struct * ev_loop ) {
   // the server will lose in LOOP!
   for( ; ; ) {
     // block at SELECT/EPOLL/POLL system call
-    activity_fd_num = poll_event( ev_loop ); 
+    activity_fd_num = ev_poll( ev_loop ); 
     if ( activity_fd_num > 0 ) {
       for ( int i = 0; i < activity_fd_num; i++ ) {
         // take out the event for the fd from ev_loop->events
@@ -82,4 +86,12 @@ int ev_process( ev_loop_struct * ev_loop ) {
  */
 void ev_main( ev_loop_struct * ev_loop ) {
   ev_process( ev_loop ); 
+}
+
+/*
+ * @desc   : get the IO/multiple name
+ * @return : string
+ */
+static char * ev_get_name() {
+  return ev_name();
 }

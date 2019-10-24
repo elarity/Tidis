@@ -13,7 +13,7 @@ typedef struct ev_fd_entry_struct {
 /*
  * @desc : create fd entry for ev_factory's ev_loop struct
  */
-static void create_fd_entry( ev_loop_struct * ev_loop ) {
+static void ev_create_fd_entry( ev_loop_struct * ev_loop ) {
   ev_fd_entry_struct * fd_entry = ( ev_fd_entry_struct * )malloc( sizeof( ev_fd_entry_struct ) );
   // clear the fd_set to ZERO!
   FD_ZERO( &( fd_entry->read_fds ) );
@@ -56,7 +56,7 @@ static void ev_del_event( ev_loop_struct * ev_loop, int fd, int event_type ) {
  * @desc   : begin an event loop
  * @return : return activity fd
  */
-static int poll_event( ev_loop_struct * ev_loop ) {
+static int ev_poll( ev_loop_struct * ev_loop ) {
   ev_fd_entry_struct * fd_entry = ev_loop->fd_entry;
   int activity_fd_num;
   int activity_fd_ret = 0;
@@ -87,6 +87,6 @@ static int poll_event( ev_loop_struct * ev_loop ) {
  * @desc   : get the IO/multiple name
  * @return : string
  */
-static char * get_event_name() {
+static char * ev_name() {
   return "select";
 }

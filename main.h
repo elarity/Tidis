@@ -1,6 +1,7 @@
 #ifndef __TIDIS_H
 #define __TIDIS_H
 
+#include "config.h"
 #include "event/ev_factory.h"
 
 // server config struct
