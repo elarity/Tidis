@@ -1,4 +1,5 @@
 #include "ev_factory.h"
+#define IS_EPOLL 1
 #ifdef IS_EPOLL
   #include "epoll.c"
 #else

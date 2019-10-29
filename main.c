@@ -116,6 +116,7 @@ server_struct * init_server( server_config_struct * server_config, ev_loop_struc
   inet_pton( AF_INET, server_config->host, &listen_socket_struct.sin_addr );
   // create listen socket.NOTE:if you do not know what exactly the last parameter means,just keep it 0
   listen_socket_fd = socket( PF_INET, SOCK_STREAM, 0 ); 
+  set_nonblock( listen_socket_fd );
   if ( listen_socket_fd < 0 ) {
     printf( "create socket error." );
     exit( -1 ); 
@@ -152,6 +153,7 @@ void accept_tcp_connect_processor( ev_loop_struct * ev_loop, int fd ) {
   socklen_t client_socket_struct_length;
   client_socket_struct_length = sizeof( client_socket_struct );
   client_socket_fd = accept( fd, ( struct sockaddr * )&client_socket_struct, &client_socket_struct_length ); 
+  set_nonblock( client_socket_fd );
 
   ev_create_file_event( ev_loop, client_socket_fd, read_from_client, EV_READABLE );
 
@@ -163,7 +165,7 @@ void read_from_client( ev_loop_struct * ev_loop, int fd ) {
             char    recv_buf[ recv_buf_length ];
             ssize_t recv_length; 
             recv_length = recv( fd, recv_buf, recv_buf_length, 0 );
-            printf( "%s\n", recv_buf );
+            printf( "%s", recv_buf );
             if ( -1 == recv_length ) {
               printf( "%s\n", strerror( errno ) );
               return;

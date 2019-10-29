@@ -36,5 +36,4 @@ void ltrim( char * );
 void rtrim( char * );
 void trim( char * );
 
-
 #endif
