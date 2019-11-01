@@ -11,6 +11,8 @@ Just For Fun
 # Usage
 ```
 make
+./tidis
+telnet 127.0.0.1 2324
 ```
 
 # TODO
