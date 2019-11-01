@@ -91,7 +91,7 @@ static int ev_poll( ev_loop_struct * ev_loop ) {
   fd_entry = ev_loop->fd_entry;
   //events   = fd_entry->events;
   activity_fd_num = epoll_wait( fd_entry->epoll_fd, fd_entry->events, ev_loop->event_size, -1 );
-  printf( "epoll.c : activity_fd_num : %d\n", activity_fd_num );
+  //printf( "epoll.c : activity_fd_num : %d\n", activity_fd_num );
   if ( activity_fd_num > 0 ) {
     // loop the epoll-ready-event
     for ( int i = 0; i < activity_fd_num; i++ ) {

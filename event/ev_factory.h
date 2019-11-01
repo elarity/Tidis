@@ -47,6 +47,7 @@ typedef struct ev_loop_struct {
 } ev_loop_struct;
 
 // func from ev_factory.c
+void test();
 ev_loop_struct * init_ev( int );
 void ev_main( ev_loop_struct * );
 int  ev_process( ev_loop_struct * );

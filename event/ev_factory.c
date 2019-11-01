@@ -1,10 +1,14 @@
+#include "../config.h"
 #include "ev_factory.h"
-#define IS_EPOLL 1
 #ifdef IS_EPOLL
   #include "epoll.c"
 #else
   #include "select.c"
 #endif
+
+void test() {
+  printf( "is_epoll:%d\n", IS_EPOLL );
+}
 
 /* 
  * @desc  : init the ev_loop_struct
