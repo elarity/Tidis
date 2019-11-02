@@ -116,7 +116,7 @@ server_struct * init_server( server_config_struct * server_config, ev_loop_struc
   inet_pton( AF_INET, server_config->host, &listen_socket_struct.sin_addr );
   // create listen socket.NOTE:if you do not know what exactly the last parameter means,just keep it 0
   listen_socket_fd = socket( PF_INET, SOCK_STREAM, 0 ); 
-  set_nonblock( listen_socket_fd );
+  net_set_nonblock( listen_socket_fd );
   if ( listen_socket_fd < 0 ) {
     printf( "create socket error." );
     exit( -1 ); 
@@ -139,7 +139,7 @@ server_struct * init_server( server_config_struct * server_config, ev_loop_struc
   server->listen_socket_fd = listen_socket_fd;
 
   // create an event-struct for listen_socket_fd
-  ev_create_file_event( ev, listen_socket_fd, accept_tcp_connect_processor, EV_READABLE ); 
+  ev_create_file_event( ev, listen_socket_fd, net_accept_tcp_connect_processor, EV_READABLE ); 
 
   return server;
 }

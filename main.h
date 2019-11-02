@@ -27,10 +27,10 @@ typedef struct server_struct {
 // main.c : function prototype
 server_config_struct * parse_config_file();
 server_struct        * init_server( server_config_struct *, ev_loop_struct * );
-void accept_tcp_connect_processor( ev_loop_struct *, int );
+void net_accept_tcp_connect_processor( ev_loop_struct *, int );
 void read_from_client( ev_loop_struct *, int );
 bool daemonize();
-void set_nonblock( int );
+void net_set_nonblock( int );
 
 // function.c
 void ltrim( char * );

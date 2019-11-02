@@ -3,7 +3,7 @@
  * @param  : listen socket fd
  * @return : int fd
  */
-int accept_tcp_connection( int listen_socket_fd ) {
+int net_accept_tcp( int listen_socket_fd ) {
   int client_socket_fd; 
   struct sockaddr_in client_socket_struct;
   socklen_t client_socket_struct_length;
@@ -12,4 +12,16 @@ int accept_tcp_connection( int listen_socket_fd ) {
   //set_nonblock( client_socket_fd );
   //ev_create_file_event( ev_loop, client_socket_fd, read_from_client, EV_READABLE );
   return client_socket_fd;
+}
+
+/*
+ * @desc : read data from tcp buffer
+ */
+void net_read_buf() {
+}
+
+/*
+ * @desc : write data to tcp buffer
+ */
+void net_write_buf() {
 }
