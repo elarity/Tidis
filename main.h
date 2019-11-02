@@ -30,6 +30,7 @@ server_struct        * init_server( server_config_struct *, ev_loop_struct * );
 void accept_tcp_connect_processor( ev_loop_struct *, int );
 void read_from_client( ev_loop_struct *, int );
 bool daemonize();
+void set_nonblock( int );
 
 // function.c
 void ltrim( char * );

@@ -144,21 +144,6 @@ server_struct * init_server( server_config_struct * server_config, ev_loop_struc
   return server;
 }
 
-/*
- * @desc : processor for processing TCP accept action
- */
-void accept_tcp_connect_processor( ev_loop_struct * ev_loop, int fd ) {
-  int client_socket_fd; 
-  struct sockaddr_in client_socket_struct;
-  socklen_t client_socket_struct_length;
-  client_socket_struct_length = sizeof( client_socket_struct );
-  client_socket_fd = accept( fd, ( struct sockaddr * )&client_socket_struct, &client_socket_struct_length ); 
-  set_nonblock( client_socket_fd );
-
-  ev_create_file_event( ev_loop, client_socket_fd, read_from_client, EV_READABLE );
-
-}
-
 void read_from_client( ev_loop_struct * ev_loop, int fd ) {
   //printf( "main.c | read_from_client \n" ); 
   size_t  recv_buf_length = 3000;
