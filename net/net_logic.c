@@ -24,3 +24,17 @@ void net_accept_tcp_connect_processor( ev_loop_struct * ev_loop, int listen_sock
   net_set_nonblock( client_socket_fd );
   ev_create_file_event( ev_loop, client_socket_fd, read_from_client, EV_READABLE );
 }
+
+void read_from_client( ev_loop_struct * ev_loop, int fd ) {
+  //printf( "main.c | read_from_client \n" ); 
+  size_t  recv_buf_length = 3000;
+  char    recv_buf[ recv_buf_length ];
+  ssize_t recv_length; 
+  recv_length = recv( fd, recv_buf, recv_buf_length, 0 );
+  printf( "%s", recv_buf );
+  if ( -1 == recv_length ) {
+    printf( "%s\n", strerror( errno ) );
+    return;
+  }
+  //send( fd, "helloclient", 12, 0 ); 
+}

@@ -144,19 +144,6 @@ server_struct * init_server( server_config_struct * server_config, ev_loop_struc
   return server;
 }
 
-void read_from_client( ev_loop_struct * ev_loop, int fd ) {
-  //printf( "main.c | read_from_client \n" ); 
-  size_t  recv_buf_length = 3000;
-  char    recv_buf[ recv_buf_length ];
-  ssize_t recv_length; 
-  recv_length = recv( fd, recv_buf, recv_buf_length, 0 );
-  printf( "%s", recv_buf );
-  if ( -1 == recv_length ) {
-    printf( "%s\n", strerror( errno ) );
-    return;
-  }
-  //send( fd, "helloclient", 12, 0 ); 
-}
 
 /*
  * @desc : unix standard daemon function.
