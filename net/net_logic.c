@@ -6,7 +6,9 @@
 #include "../main.h"
 #include "net_base.c"
 
-// set a fd to non-blocking
+/* 
+ * @desc : set a fd to non-blocking
+ */
 void net_set_nonblock( int fd ) {
   int origin_fd_option = fcntl( fd, F_GETFL ); 
   int new_fd_option    = origin_fd_option | O_NONBLOCK; 

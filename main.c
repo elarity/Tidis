@@ -14,6 +14,9 @@
 #include "main.h"
 #include "function.c"
 
+// temp TODO
+#include "net/net_logic.c"
+
 int main( int argc, char * argv[] ) {
   // initial server config
   server_config_struct * server_config;
