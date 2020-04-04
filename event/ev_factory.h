@@ -23,27 +23,27 @@ struct ev_loop_struct;
 typedef void file_event_processor( struct ev_loop_struct *, int );
 // a file event struct
 typedef struct ev_file_event {
-  // Redis use mask code and bitwise to process event-type
-  // But to lots of CURDER,it's a little wried
-  // let's cubao a little,just use a int type to flag event-type
-  int event_type;   
-  file_event_processor * read_processor; 
-  file_event_processor * write_processor; 
+    // Redis use mask code and bitwise to process event-type
+    // But to lots of CURDER,it's a little wried
+    // let's cubao a little,just use a int type to flag event-type
+    int event_type;
+    file_event_processor * read_processor;
+    file_event_processor * write_processor;
 } ev_file_event_struct;
 // a fire event struct
 typedef struct ev_fire_event {
-  int event_type;
-  int fd; 
+    int event_type;
+    int fd;
 } ev_fire_event_struct;
 // an event-loop struct
 typedef struct ev_loop_struct {
-  int max_fd; 
-  int event_size;
-  ev_file_event_struct * file_events; 
-  ev_fire_event_struct * fire_events;
-  //struct timeval tv_out;
-  void * fd_entry; 
-  void * tv_out;
+    int max_fd;
+    int event_size;
+    ev_file_event_struct * file_events;
+    ev_fire_event_struct * fire_events;
+    //struct timeval tv_out;
+    void * fd_entry;
+    void * tv_out;
 } ev_loop_struct;
 
 // func from ev_factory.c
@@ -51,6 +51,6 @@ void test();
 ev_loop_struct * init_ev( int );
 void ev_main( ev_loop_struct * );
 int  ev_process( ev_loop_struct * );
-void ev_create_file_event( ev_loop_struct *, int, file_event_processor *, int ); 
+void ev_create_file_event( ev_loop_struct *, int, file_event_processor *, int );
 static char * ev_get_name();
 #endif

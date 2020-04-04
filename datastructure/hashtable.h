@@ -4,18 +4,21 @@
 #include <string.h>
 
 #define HT_SIZE 1024
+
 // hashtable node struct
 typedef struct hashtable_node {
-  char * key;
-  char * value;
-  struct hashtable_node * next;  //为拉链法解决hash collision
+    char * key;
+    char * value;
+    struct hashtable_node * next;  //为拉链法解决hash collision
 } ht_node_st;
+
 // hashtable entry
 typedef struct hashtable_entry {
-  size_t size;
-  size_t used;
-  ht_node_st ** entry;
+    size_t size;
+    size_t used;
+    ht_node_st ** entry;
 } ht_st;
+
 // function prototype
 // init a hashtable
 ht_st * init_ht();

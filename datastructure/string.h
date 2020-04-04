@@ -1,7 +1,7 @@
 typedef struct sds_struct {
-  size_t free;
-  size_t length;
-  char   buf[]; 
+    size_t free;
+    size_t length;
+    char   buf[];
 } sds_struct;
 sds_struct * sds_init( char * );
 void sds_empty( sds_struct * );
