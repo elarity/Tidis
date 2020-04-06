@@ -17,6 +17,8 @@
 // temp TODO
 #include "net/net_logic.c"
 
+server_struct * server;
+
 int main( int argc, char * argv[] ) {
     // initial server config
     server_config_struct * server_config;
@@ -34,7 +36,7 @@ int main( int argc, char * argv[] ) {
     ev_loop_struct * ev = init_ev( 1024 );
 
     // create a single process & thread tcp server
-    server_struct * server = init_server( server_config, ev );
+    server = init_server( server_config, ev );
 
     // begin event-loop
     ev_main( ev );
@@ -144,7 +146,10 @@ server_struct * init_server( server_config_struct * server_config, ev_loop_struc
 
     // init database, the hashmap struct
     db_struct * db = ( db_struct * )malloc( sizeof( db_struct ) );
-    server->db     = db;
+    // init the key hashtable
+    ht_st * key_ht = init_ht();
+    db->key = key_ht;
+    server->db = db;
 
     // create an event-struct for listen_socket_fd
     ev_create_file_event( ev, listen_socket_fd, net_accept_tcp_connect_processor, EV_READABLE );

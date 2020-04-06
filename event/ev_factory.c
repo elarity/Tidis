@@ -6,10 +6,6 @@
 #include "select.c"
 #endif
 
-void test() {
-    printf( "is_epoll:%d\n", IS_EPOLL );
-}
-
 /*
  * @desc  : init the ev_loop_struct
  * @param : size, the size of normal event & fire event

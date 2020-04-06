@@ -1,3 +1,5 @@
+#include "hashtable.h"
+
 /*
  * @desc : init the hashtable entry
  */
@@ -12,13 +14,14 @@ ht_st * init_ht() {
 }
 
 /*
- * @desc : init the hashtable entry
+ * @desc : allocate memory for new ht-node
  */
-ht_node_st * allocate_ht_node( const char * key, const char * value ) {
+ht_node_st * allocate_ht_node( char * key, void * value ) {
     ht_node_st * ht_node;
     ht_node = ( ht_node_st * )malloc( sizeof( ht_node_st ) );
     ht_node->key   = strdup( key );
-    ht_node->value = strdup( value );
+    //ht_node->value = strdup( value );
+    ht_node->value = value;
     ht_node->next  = NULL;
     return ht_node;
 }
@@ -59,11 +62,13 @@ void destroy_ht_node( ht_node_st * ht_node ) {
 
 /*
  * @desc : add a new node to hash-table
+ * 当前key，实际上写死为TIDIS_OBJECT_STRING
  */
-int add_ht_node( ht_st * ht_entry, const char * key, const char * value ) {
+int add_ht_node( ht_st * ht_entry, tidis_object_struct * tidis_object_key, void * value ) {
     ht_node_st * new_ht_node;
     ht_node_st * origin_ht_node;
     int          hash_index;
+    char * key = tidis_object_key->ptr;
     hash_index = hash( key, strlen( key ), 0 ) % HT_SIZE;
     // if hash-collision
     origin_ht_node = ht_entry->entry[ hash_index ];
@@ -92,9 +97,10 @@ int add_ht_node( ht_st * ht_entry, const char * key, const char * value ) {
 /*
  * @desc : find a key from hash-table
  */
-ht_node_st * get_ht_node( ht_st * ht_entry, const char * key ) {
+ht_node_st * get_ht_node( ht_st * ht_entry, tidis_object_struct * tidis_object_key ) {
     int hash_index;
     ht_node_st * ht_node;
+    char * key = tidis_object_key->ptr;
     hash_index = hash( key, strlen( key ), 0 ) % HT_SIZE;
     ht_node    = ht_entry->entry[ hash_index ];
     // exists hashtable_node @ hash_index

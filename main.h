@@ -1,6 +1,8 @@
 #ifndef __TIDIS_H
 #define __TIDIS_H
 
+#define TIDIS_OBJECT_STRING 1
+
 #include "config.h"
 // event loop
 #include "event/ev_factory.h"
@@ -29,7 +31,7 @@ typedef struct db_struct {
     // 键key的空间，一个hashtable数据结构
     ht_st * key;
     // 过期时间key的空间，另一个hashtable数据结构
-    ht_st * expire;
+    ht_st * expire;  // 暂时无用
 } db_struct;
 
 // client struct
