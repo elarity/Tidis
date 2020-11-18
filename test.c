@@ -1,7 +1,18 @@
 #include <stdio.h>
 #include <string.h>
+int * returnit() {
+//    int counter = 12;
+//    return &counter;
+    return NULL;
+}
 int main( int argc, char * argv[] ) {
-    char msg[ 6 ] = "abc\0d";
-    printf( "%s %ld %ld\n", msg, strlen( msg ), sizeof( msg ) );
-    return 0;
+
+    char msg[] = "xxoooxoxoxxo";
+    msg = "kakfk";
+
+//    int * counter_p;
+//    int counter;
+//    counter = 12;
+//    counter_p = returnit();
+//    printf("返回地址:%p\n", counter_p);
 }

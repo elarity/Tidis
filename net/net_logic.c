@@ -34,7 +34,7 @@ void net_accept_tcp_connect_processor( ev_loop_struct * ev_loop, int listen_sock
  * */
 void read_from_client( ev_loop_struct * ev_loop, int fd ) {
     //printf( "main.c | read_from_client \n" );
-    size_t  recv_buf_length = 3000;
+    size_t  recv_buf_length = 1024;
     char    recv_buf[ recv_buf_length ];
     ssize_t recv_length;
     recv_length = recv( fd, recv_buf, recv_buf_length, 0 );
@@ -45,15 +45,15 @@ void read_from_client( ev_loop_struct * ev_loop, int fd ) {
     }
 
     //command_cell_struct * command;// = ( command_cell_struct * )malloc( sizeof( command_cell_struct * ) );
-    //printf( "%p\n", command );
+    printf( "%s\n", recv_buf );
     char * command = "*3\r\n$3set\r\n$5user1\r\n$12wahahahahaha\r\n";
-    //char * command = "*3\r\n$3get\r\n$5user1\r\n";
+    char * command = "*3\r\n$3get\r\n$5user1\r\n";
     int command_all_cell_length;
-    command_all_cell_length = string2int( command + 1 );
+    command_all_cell_length = string2int( recv_buf + 1 );
     command_cell_struct * command_cell = create_command_array( command_all_cell_length );
     //command_cell_struct * command_cell = ( command_cell_struct * )malloc( sizeof( command_cell_struct * ) );
     //printf( "%p\n", command_cell );
-    decode_command( &command_cell, command );
+    decode_command( &command_cell, recv_buf );
     //for ( int i=0; i < 3;i++ ) {
         //printf( "%d\n", command->cell_length );
         //printf( "%s\n", (command_cell->cell[ i ])->string );
@@ -87,7 +87,7 @@ void read_from_client( ev_loop_struct * ev_loop, int fd ) {
         printf( "value : %s\n", (char *)value_object1->ptr );
 
     } else if ( 0 == strcmp( action, "get" ) ) {
-        printf( "get action\n" );
+        printf( "get action\n" );return;
         // 一、从command中分配到tidis object中
         tidis_object_struct * key_object = ( tidis_object_struct * )malloc( sizeof( tidis_object_struct ) );
         key_object->type = TIDIS_OBJECT_STRING;
@@ -96,9 +96,9 @@ void read_from_client( ev_loop_struct * ev_loop, int fd ) {
         ht_st * ht_key = server->db->key;
         printf( "key : %s\n", (char *)key_object->ptr );
         ht_node_st * ht_node = get_ht_node( ht_key, key_object );
-        printf( "%s\n", ht_node->key );
-        //tidis_object_struct * value_object = (tidis_object_struct *)ht_node->value;
-        //printf( "%d\n", value_object->type );
+        //printf( "%s\n", ht_node->key );
+        //tidis_object_struct * value_object2 = (tidis_object_struct *)ht_node->value;
+        //printf( "value : %s\n", (char *)value_object2->ptr );
     }
 
 
