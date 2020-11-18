@@ -76,7 +76,9 @@ server_config_struct * parse_config_file() {
         value = _config_item;
         trim( key );
         trim( value );
-        if ( 0 == strcmp( key, "host" ) ) {
+        if (key[0] == '#' || key[0] == '\0') {
+            continue;
+        } if ( 0 == strcmp( key, "host" ) ) {
             strcpy( server_config->host, value );
         } else if ( 0 == strcmp( key, "port" ) ) {
             strcpy( server_config->port, value );
