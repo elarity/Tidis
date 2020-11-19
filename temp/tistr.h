@@ -10,4 +10,4 @@ void tistr_strcat(char *, char *);
 void tistr_strcpy(char *, char *);
 size_t tistr_get_length(tistr_struct *);
 size_t tistr_get_free(tistr_struct *);
-void tistr_expansion(tistr_struct *, size_t)
+char * tistr_expansion(tistr_struct *, size_t)
