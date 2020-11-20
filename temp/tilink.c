@@ -62,17 +62,24 @@ void * add_tail(tilink_entry_struct * tilink_entry_point, tilink_node_struct * n
 }
 
 /*
- * @desc : 根据index获取node
+ * @desc : 根据index获取node, O(N)
  * */
 tilink_node_struct * get_node_by_index(tilink_entry_struct * tilink_entry_point, unsigned long index)
 {
-    unsigned long 
+    tilink_node_struct * node;
+    unsigned long pos = 1;
     unsigned long length;
     length = get_link_length(tilink_entry_point);
+    // 验证下长度
     if (index > length) {
         return NULL;
     }
-
+    node = tilink_entry_point->head;
+    while(pos < index) {
+        node = node->next;
+        pos++;
+    }
+    return node;
 }
 
 /*

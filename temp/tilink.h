@@ -27,6 +27,7 @@ void add_head(tilink_entry_struct *, tilink_node_struct *);
 // 添加一个tail node
 void add_tail(tilink_entry_struct *, tilink_node_struct *);
 // 添加到指定位置node
+void add_node_2_assign();
 // 根据index获取node
 tilink_node_struct * get_node_by_index(tilink_entry_struct *, unsigned long);
 // 根据value获取node
