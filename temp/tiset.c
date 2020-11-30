@@ -2,6 +2,11 @@
 #include <string.h>
 #include "tiset.h"
 
+static uint8_t _get_value_encode(int64_t value);
+static uint8_t _get_position_by_value(tiset_struct * tiset_p, int64_t value, uint32_t * position);
+static tiset_struct * resize_tiset_memory(tiset_struct * tiset_p, uint32_t length);
+static void _tiset_set(tiset_struct * tiset_p, uint32_t index, int64_t value);
+
 /*
  * @desc : 创建一个空的set
  * */
@@ -41,8 +46,10 @@ tiset_struct * tiset_add(tiset_struct * tiset_p, int64_t value)
         // 二、当前set中不存在该value，申请新的大空间
         resize_tiset_memory(tiset_p, (tiset_p->length + 1));
         // 三、将value添加到被分配内存大空间后的区域中
-
     }
+    _tiset_set(tiset_p, position, value);
+    tiset_p->length++;
+    return tiset_p;
 }
 
 /*
@@ -51,11 +58,11 @@ tiset_struct * tiset_add(tiset_struct * tiset_p, int64_t value)
 static uint8_t _get_value_encode(int64_t value)
 {
     if (value < INT32_MIN || value > INT32_MAX)
-        return ENCODE_INT64
-    else if (value < INT16_MIN || value INT16_MAX)
-        return ENCODE_INT32
+        return ENCODE_INT64;
+    else if (value < INT16_MIN || value > INT16_MAX)
+        return ENCODE_INT32;
     else
-        return ENCODE_INT16
+        return ENCODE_INT16;
 }
 
 /*
@@ -128,4 +135,16 @@ int32_t get_value_by_index(tiset_struct * tiset_p, uint32_t index)
 {
     int32_t value;
     return tiset_p->array[index];
+}
+
+/*
+ * @desc : 在index位置上设置数值
+ * */
+static void _tiset_set(tiset_struct * tiset_p, uint32_t index, int64_t value) {
+    if (tiset_p->encode == ENCODE_INT16)
+        ((int16_t *)tiset_p->array)[index] = value;
+    else if (tiset_p->encode == ENCODE_INT32)
+        ((int32_t *)tiset_p->array)[index] = value;
+    else
+        ((int64_t *)tiset_p->array)[index] = value;
 }
