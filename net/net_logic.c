@@ -11,10 +11,11 @@ extern server_struct * server;
 /*
  * @desc : set a fd to non-blocking
  */
-void net_set_nonblock( int fd ) {
-    int origin_fd_option = fcntl( fd, F_GETFL );
+void net_set_nonblock(int fd)
+{
+    int origin_fd_option = fcntl(fd, F_GETFL);
     int new_fd_option    = origin_fd_option | O_NONBLOCK;
-    fcntl( fd, F_SETFL, new_fd_option );
+    fcntl(fd, F_SETFL, new_fd_option);
 }
 
 /*
@@ -22,7 +23,8 @@ void net_set_nonblock( int fd ) {
  * @param : ev_loop, event loop
  * @param : fd, listen_socket_fd
  */
-void net_accept_tcp_connect_processor( ev_loop_struct * ev_loop, int listen_socket_fd ) {
+void net_accept_tcp_connect_processor(ev_loop_struct * ev_loop, int listen_socket_fd)
+{
     int client_socket_fd;
     client_socket_fd = net_accept_tcp( listen_socket_fd );
     net_set_nonblock( client_socket_fd );
@@ -32,36 +34,37 @@ void net_accept_tcp_connect_processor( ev_loop_struct * ev_loop, int listen_sock
 /*
  * @desc : read command string from client.
  * */
-void read_from_client( ev_loop_struct * ev_loop, int fd ) {
+void read_from_client(ev_loop_struct * ev_loop, int fd)
+{
     //printf( "main.c | read_from_client \n" );
     size_t  recv_buf_length = 1024;
-    char    recv_buf[ recv_buf_length ];
+    char    recv_buf[recv_buf_length];
     ssize_t recv_length;
-    recv_length = recv( fd, recv_buf, recv_buf_length, 0 );
+    recv_length = recv(fd, recv_buf, recv_buf_length, 0);
     //printf( "%s", recv_buf );
-    if ( -1 == recv_length ) {
-        printf( "%s\n", strerror( errno ) );
+    if (-1 == recv_length) {
+        printf("%s\n", strerror( errno ));
         return;
     }
 
     //command_cell_struct * command;// = ( command_cell_struct * )malloc( sizeof( command_cell_struct * ) );
-    printf( "%s\n", recv_buf );
+    printf("%s\n", recv_buf);
     char * command = "*3\r\n$3set\r\n$5user1\r\n$12wahahahahaha\r\n";
     char * command = "*3\r\n$3get\r\n$5user1\r\n";
     int command_all_cell_length;
-    command_all_cell_length = string2int( recv_buf + 1 );
-    command_cell_struct * command_cell = create_command_array( command_all_cell_length );
+    command_all_cell_length = string2int(recv_buf + 1);
+    command_cell_struct * command_cell = create_command_array(command_all_cell_length);
     //command_cell_struct * command_cell = ( command_cell_struct * )malloc( sizeof( command_cell_struct * ) );
     //printf( "%p\n", command_cell );
-    decode_command( &command_cell, recv_buf );
+    decode_command(&command_cell, recv_buf);
     //for ( int i=0; i < 3;i++ ) {
         //printf( "%d\n", command->cell_length );
         //printf( "%s\n", (command_cell->cell[ i ])->string );
     //}
 
-    char * action = ( command_cell->cell[ 0 ] )->string;
-    if ( 0 == strcmp( action, "set" ) ) {
-        printf( "set action\n" );
+    char * action = (command_cell->cell[0])->string;
+    if (0 == strcmp(action, "set")) {
+        printf("set action\n");
         // 将解析后command中的数据转移到tidis object中去，然后释放command占用的内存
         // 一、从command中分配到tidis object中
         tidis_object_struct * key_object = ( tidis_object_struct * )malloc( sizeof( tidis_object_struct ) );
@@ -86,7 +89,7 @@ void read_from_client( ev_loop_struct * ev_loop, int fd ) {
         tidis_object_struct * value_object1 = (tidis_object_struct *)ht_node->value;
         printf( "value : %s\n", (char *)value_object1->ptr );
 
-    } else if ( 0 == strcmp( action, "get" ) ) {
+    } else if (0 == strcmp(action, "get")) {
         printf( "get action\n" );return;
         // 一、从command中分配到tidis object中
         tidis_object_struct * key_object = ( tidis_object_struct * )malloc( sizeof( tidis_object_struct ) );

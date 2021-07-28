@@ -50,6 +50,6 @@ typedef struct ev_loop_struct {
 ev_loop_struct * init_ev( int );
 void ev_main( ev_loop_struct * );
 int  ev_process( ev_loop_struct * );
-void ev_create_file_event( ev_loop_struct *, int, file_event_processor *, int );
+void ev_create_file_event(ev_loop_struct *, int, file_event_processor *, int);
 static char * ev_get_name();
 #endif
