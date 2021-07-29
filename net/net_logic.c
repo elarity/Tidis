@@ -26,13 +26,13 @@ void net_set_nonblock(int fd)
 void net_accept_tcp_connect_processor(ev_loop_struct * ev_loop, int listen_socket_fd)
 {
     int client_socket_fd;
-    client_socket_fd = net_accept_tcp( listen_socket_fd );
-    net_set_nonblock( client_socket_fd );
-    ev_create_file_event( ev_loop, client_socket_fd, read_from_client, EV_READABLE );
+    client_socket_fd = net_accept_tcp(listen_socket_fd);
+    net_set_nonblock(client_socket_fd);
+    ev_create_file_event(ev_loop, client_socket_fd, read_from_client, EV_READABLE);
 }
 
 /*
- * @desc : read command string from client.
+ * @desc : read command string from client
  * */
 void read_from_client(ev_loop_struct * ev_loop, int fd)
 {
@@ -43,14 +43,14 @@ void read_from_client(ev_loop_struct * ev_loop, int fd)
     recv_length = recv(fd, recv_buf, recv_buf_length, 0);
     //printf( "%s", recv_buf );
     if (-1 == recv_length) {
-        printf("%s\n", strerror( errno ));
+        printf("%s\n", strerror(errno));
         return;
     }
 
     //command_cell_struct * command;// = ( command_cell_struct * )malloc( sizeof( command_cell_struct * ) );
-    printf("%s\n", recv_buf);
-    char * command = "*3\r\n$3set\r\n$5user1\r\n$12wahahahahaha\r\n";
-    char * command = "*3\r\n$3get\r\n$5user1\r\n";
+    //printf("%s\n", recv_buf);
+    //char * command = "*3\r\n$3set\r\n$5user1\r\n$12wahahahahaha\r\n";
+    recv_buf = "*2\r\n$3get\r\n$5user1\r\n";
     int command_all_cell_length;
     command_all_cell_length = string2int(recv_buf + 1);
     command_cell_struct * command_cell = create_command_array(command_all_cell_length);
@@ -81,7 +81,6 @@ void read_from_client(ev_loop_struct * ev_loop, int fd)
         //printf( "%d\n", server->db_num );
         ht_st * ht_key = server->db->key;
         add_ht_node( ht_key, key_object, value_object );
-
 
         printf( "key : %s\n", (char *)key_object->ptr );
         ht_node_st * ht_node = get_ht_node( ht_key, key_object );
